@@ -1,16 +1,13 @@
 import PropTypes from 'prop-types';
 import { GalleryItem, ImgItem } from './ImageGalleryItem.styled';
-import { Component } from 'react';
 
-export class ImageGalleryItem extends Component {
-  render() {
-    return (
-      <GalleryItem id={this.props.id} onClick={this.props.onClick}>
-        <ImgItem src={this.props.src} alt={this.props.alt} />
-      </GalleryItem>
-    );
-  }
-}
+const ImageGalleryItem = ({ id, onClick, src, alt }) => {
+  return (
+    <GalleryItem id={id} onClick={onClick}>
+      <ImgItem src={src} alt={alt} />
+    </GalleryItem>
+  );
+};
 
 ImageGalleryItem.propTypes = {
   id: PropTypes.number.isRequired,
@@ -18,3 +15,5 @@ ImageGalleryItem.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
 };
+
+export default ImageGalleryItem;

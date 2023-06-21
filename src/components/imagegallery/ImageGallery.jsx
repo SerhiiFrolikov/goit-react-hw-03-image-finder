@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Component } from 'react';
 import { Gallery } from './ImageGallery.styled';
 import { Modal } from '../modal/Modal';
-import { ImageGalleryItem } from '../imagegalleryitem/ImageGalleryItem';
+import ImageGalleryItem from '../imagegalleryitem/ImageGalleryItem';
 
 export class ImageGallery extends Component {
   state = {
@@ -10,12 +10,9 @@ export class ImageGallery extends Component {
     openModal: false,
   };
 
-  addModalUrl = e => {
-    const modalUrl = this.props.cards.filter(card => {
-      return Number(card.id) === Number(e.currentTarget.id);
-    });
+  addModalUrl = url => {
     this.setState({
-      url: modalUrl[0].largeImageURL,
+      url,
       openModal: true,
     });
   };
@@ -30,12 +27,12 @@ export class ImageGallery extends Component {
     return (
       <>
         <Gallery>
-          {this.props.cards.map(({ id, webformatURL, tags }) => {
+          {this.props.cards.map(({ id, webformatURL, tags, largeImageURL }) => {
             return (
               <ImageGalleryItem
                 id={id}
                 key={id}
-                onClick={this.addModalUrl}
+                onClick={() => this.addModalUrl(largeImageURL)}
                 src={webformatURL}
                 alt={tags}
               />
@@ -57,5 +54,5 @@ ImageGallery.propTypes = {
       webformatURL: PropTypes.string,
       tags: PropTypes.string,
     })
-  ),
+  ).isRequired,
 };

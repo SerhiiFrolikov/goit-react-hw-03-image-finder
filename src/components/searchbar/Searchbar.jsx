@@ -12,7 +12,6 @@ import { ReactComponent as SearchIcon } from '../../icons/search.svg';
 export class Searchbar extends Component {
   state = {
     query: '',
-    pageNumber: 1,
   };
 
   addQueryName = event => {

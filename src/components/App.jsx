@@ -19,16 +19,11 @@ class App extends Component {
   };
 
   async componentDidUpdate(_, prevState) {
-    if (
-      prevState.query !== this.state.query ||
-      prevState.pageNumber !== this.state.pageNumber
-    ) {
+    const { query, pageNumber } = this.state;
+    if (prevState.query !== query || prevState.pageNumber !== pageNumber) {
       this.setState({ loaderVisible: true });
       try {
-        const { data } = await pixabayApi.fetchPhotos(
-          this.state.query,
-          this.state.pageNumber
-        );
+        const { data } = await pixabayApi.fetchPhotos(query, pageNumber);
         this.handleSuccessFetch(data);
       } catch (error) {
         this.handleErrorFetch(error);
@@ -64,9 +59,18 @@ class App extends Component {
       );
       return;
     }
+
+    const images = data.hits.map(
+      ({ id, tags, webformatURL, largeImageURL }) => ({
+        id,
+        tags,
+        webformatURL,
+        largeImageURL,
+      })
+    );
     this.setState(prevState => ({
       loaderVisible: false,
-      cards: [...prevState.cards, ...data.hits],
+      cards: [...prevState.cards, ...images],
       loadMoreBtn: true,
     }));
     if (data.hits.length < 12) {
@@ -82,14 +86,13 @@ class App extends Component {
   }
 
   render() {
+    const { cards, loaderVisible, loadMoreBtn } = this.state;
     return (
       <Container>
         <Searchbar handleSubmit={this.handleSubmitForm} />
-        <ImageGallery cards={this.state.cards} />
-        {this.state.loaderVisible && <Loader />}
-        {this.state.loadMoreBtn && (
-          <Button handleSubmit={this.handleLoadMoreBtnClick} />
-        )}
+        <ImageGallery cards={cards} />
+        {loaderVisible && <Loader />}
+        {loadMoreBtn && <Button handleSubmit={this.handleLoadMoreBtnClick} />}
       </Container>
     );
   }
